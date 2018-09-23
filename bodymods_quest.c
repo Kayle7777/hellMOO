@@ -1,0 +1,7 @@
+"Illegal 'body shop' guy"
+"Medic skill check to see list of possible mods you can do maybe?"
+"Obvious medic skill check to do the surgery"
+"Crafting skill check to make the body mod -- show list of possible mods you can do, and what you need to make them"
+    -- "Bionic "
+    -- "Bionic "
+    -- "Bionic "
