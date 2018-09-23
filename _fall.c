@@ -28,7 +28,7 @@ if (!valid(target))
 endif
 announced = 0;
 dcode = random(999999);
-player.flight_nfall = 0;
+player.flight_ncatch = 1;
 while (is_a(who, $actor) && who.location == this && altitude > 0 && player.flight_ncatch)
   smeter = $rpg:graphical_meter(speed, speed_max, 15, 0, $ansi.red, $ansi.red);
   ameter = $rpg:graphical_meter(altitude, amax, 20, 0, $ansi.cyan, $ansi.cyan);
