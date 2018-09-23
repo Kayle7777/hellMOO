@@ -12,7 +12,7 @@ elseif ($drugs.broken_leg:doses_for(player))
 endif
 
 if (is_a(player.location, #761))
-    if (player:room():is_falling(me))
+    if (player:room():is_falling(player))
         player.flight_ncatch = 0;
         player:tell("You focus your mind and stop your fall.");
     else
