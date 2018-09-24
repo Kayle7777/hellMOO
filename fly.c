@@ -13,8 +13,16 @@ endif
 
 if (is_a(player.location, #761))
     if (player:room():is_falling(player))
-        player.flight_ncatch = 0;
-        player:tell("You focus your mind and stop your fall.");
+        for task in (queued_tasks())
+          {id, start, ticks, clock_id, prog, verb_loc, verb_name, line_num, verb_this} = task;
+          if (verb_name == "_fall" && verb_this == here && player.location == verb_this)
+            flight_task = id;
+          endif
+        endfor
+        if (flight_task)
+            this:_recover(player, flight_task);
+            return player:tell("You attempt to recover");
+        endif
     else
         return player:tell("You're already in flight.  Try flying around a bit, or climbing or diving.");
     endif
