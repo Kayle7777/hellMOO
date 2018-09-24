@@ -13,7 +13,7 @@ endif
 
 if (is_a(player.location, #761))
     if (player:room():is_falling(player))
-        "This attempts to find the fly task, code is mostly the same as is_falling";
+        "This attempts to find the fall task, code is mostly the same as is_falling";
         "The other solution I found was to add a new property to players. Then add an additional condition to the while loop in _fall to check for it. _fall initially sets it to 1, but if a player types their flight mutation 'fly' again, it would set it to 0. I liked that way better but adding a new property to players isn't ideal I think...";
         for task in (queued_tasks())
           {id, start, ticks, clock_id, prog, verb_loc, verb_name, line_num, verb_this} = task;
