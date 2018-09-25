@@ -1,6 +1,5 @@
 "15698 on *id";
 
-#5144:"make cook build ass*emble make1"   any (on top of/on/onto/upon) this
 "Assemble a recipe indicated by number.";
 r = this:all_recipes();
 if (!r)
@@ -37,7 +36,19 @@ endif
 ing = recipe:find_ingredients(this);
 if (typeof(ing) == OBJ)
     player:tell("According to ", recipe:dname(), ", you need ", ing:iname(), " -- and you don't have one on ", this:dname(), ".");
-    
+    clist = this.contents;
+    searchlist = recipe.ingredients;
+    for benchcontents in (this.contents)
+        for _ingredient in (searchlist)
+            if (valid($mu:match(benchcontents.name, {_ingredient[1]})))
+                searchlist = setremove(searchlist, _ingredient);
+            endif
+        endfor
+    endfor
+    player:tell(searchlist);
+    for remaining in (searchlist)
+        player:tell(#134933:_check_contents(remaining[1].name, player.location.contents));
+    endfor
     return;
 endif
 player:queue_action($actions.craft, {recipe, player, this}, 1, "assemble");
