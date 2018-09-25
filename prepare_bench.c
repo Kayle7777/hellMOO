@@ -46,22 +46,7 @@ if (typeof(ing) == OBJ)
         endfor
     endfor
     player:tell(toliteral(searchlist));
-    for remaining in (searchlist)
-        found = #134933:_check_contents(remaining[1].name, player.location.contents);
-        roomtf = found[1] ? player:queue_action() | 0;
-        if (!roomtf)
-            for containers in (found[2])
-                cfound = #134933:_check_contents(remaining[1].name, containers.contents);
-                c1tf = cfound[1]? "Put the queue action here, because they found it in the first container layer" | 0;
-                if (!c1tf)
-                    for containers2 in (cfound[2])
-                        c2found = #134933:_check_contents(remaining[1].name, containers2.contents);
-                        c2tf = c2found[1]? "Put the queue action here, because they found it in the second container layer" | 0;
-                    endfor
-                endif
-            endfor
-        endif
-    endfor
+
     return;
 endif
 player:queue_action($actions.craft, {recipe, player, this}, 1, "assemble");
