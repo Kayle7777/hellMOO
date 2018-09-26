@@ -26,4 +26,5 @@ else
             endif
         endfor
     endif
+    return 0;
 endif

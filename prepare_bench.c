@@ -40,10 +40,16 @@ if (typeof(ing) == OBJ)
         for benchcontents in (this.contents)
             for _ingredient in (ingredient_search_list)
                 if (valid($mu:match(benchcontents.name, {_ingredient[1]})))
-                    ingredient_search_list = setremove(ingredient_search_list, _ingredient);
+                    "This is a match in the bench, for one of the ingredients. _ingredient[2] will be the quantity we need";
+                    quantity = length($mu:match_list(_ingredient[1].name, {benchcontents}));
+                    _ingredient[2] = _ingredient[2] - quantity;
+                    if (_ingredient[2] >= 0)
+                        ingredient_search_list = setremove(ingredient_search_list, _ingredient);
+                    endif
                 endif
             endfor
         endfor
+        "Above loop should make ingredient_search_list == the list we need to iterate through with correct required quantities";
         putlist = {};
         for remaining in (ingredient_search_list)
             howmanyneeded = remaining[2];
