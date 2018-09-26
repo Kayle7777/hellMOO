@@ -35,15 +35,14 @@ else
 endif
 ing = recipe:find_ingredients(this);
 if (typeof(ing) == OBJ)
-    if ($mu:is_one_of($mutations.junkrat, player.mutations))
+    if ($lu:is_one_of($mutations.junkrat, player.mutations))
         ingredient_search_list = recipe.ingredients;
         for benchcontents in (this.contents)
             for _ingredient in (ingredient_search_list)
                 if (valid($mu:match(benchcontents.name, {_ingredient[1]})))
                     "This is a match in the bench, for one of the ingredients. _ingredient[2] will be the quantity we need";
-                    quantity = length($mu:match_list(_ingredient[1].name, {benchcontents}));
-                    _ingredient[2] = _ingredient[2] - quantity;
-                    if (_ingredient[2] >= 0)
+                    _ingredient[2] = (_ingredient[2] - 1);
+                    if (_ingredient[2] <= 0)
                         ingredient_search_list = setremove(ingredient_search_list, _ingredient);
                     endif
                 endif
@@ -51,15 +50,8 @@ if (typeof(ing) == OBJ)
         endfor
         "Above loop should make ingredient_search_list == the list we need to iterate through with correct required quantities";
         putlist = {};
-        for remaining in (ingredient_search_list)
-            howmanyneeded = remaining[2];
-            while (howmanyneeded > 0)
-                found = this:_craft_search(remaining[1]);
-                player:queue_action($actions.get, {{found[1]}, found[2]}, 1, tostr("get " found[1].name, " from ", found[2].name));
-                putlist = {@putlist, found[1]}
-                howmanyneeded = howmanyneeded -1;
-            endwhile
-        endfor
+        player:tell(toliteral(ingredient_search_list));
+        player:tell("According to ", recipe:dname(), ", you need ", ing:iname(), " -- and you don't have one on ", this:dname(), ".");
     else
         player:tell("According to ", recipe:dname(), ", you need ", ing:iname(), " -- and you don't have one on ", this:dname(), ".");
         return;
