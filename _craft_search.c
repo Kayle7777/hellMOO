@@ -4,27 +4,34 @@ searchitem = args[1];
 sname = searchitem.name;
 "search for searchitem in all containers near player";
 "returns LIST {OBJ founditem, OBJ container}";
-pfound = #134933:_check_contents(sname, player.contents);
-ptf = pfound[1] ? 1 | 0;
-if (ptf)
-    return {$mu:match(sname, player.contents), player};
+pfound = this:_check_contents(sname, player.contents);
+if (pfound[1])
+    "If it's directly in the player inventory, no container";
+    return {$mu:match_list(sname, player.contents), player};
 elseif (pfound[2])
+    "Does player have any containers on hand, if so check them";
     for pcontainers in (pfound[2])
-        return {$mu:match(sname, pcontainers.contents), pcontainers};
+        pcfound = this:_check_contents(sname, pcontainers);
+        if (pcfound[1])
+            return {$mu:match_list(sname, pcontainers.contents), pcontainers};
+        endif
     endfor
+"Nothing found in player or player containers at this point";
 else
-    rfound = #134933:_check_contents(sname, player.location.contents);
-    roomtf = rfound[1] ? 1 | 0;
-    if (roomtf)
-        return {$mu:match(sname, here)};
-    else
-        for containers in (rfound[2])
-            cfound = #134933:_check_contents(sname, containers.contents);
-            c1tf = cfound[1] ? 1 | 0;
-            if (c1tf)
-                return {$mu:match(sname, containers)};
+    "Now check the room";
+    rfound = this:_check_contents(sname, player.location.contents);
+    if (rfound[1])
+        "Found directly in the room on the floor";
+        return {$mu:match_list(sname, player.location.contents), here};
+    elseif (rfound[2])
+        "Any containers in room";
+        for roomcontainers in (rfound[2])
+            rcfound = this:_check_contents(sname, roomcontainers.contents);
+            if (rcfound[1])
+                return {$mu:match_list(sname, roomcontainers.contents), roomcontainers};
             endif
         endfor
     endif
-    return 0;
+    "Nothing found.";
+    return {0, 0};
 endif
