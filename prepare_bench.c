@@ -35,18 +35,28 @@ else
 endif
 ing = recipe:find_ingredients(this);
 if (typeof(ing) == OBJ)
-    player:tell("According to ", recipe:dname(), ", you need ", ing:iname(), " -- and you don't have one on ", this:dname(), ".");
-    clist = this.contents;
-    searchlist = recipe.ingredients;
-    for benchcontents in (this.contents)
-        for _ingredient in (searchlist)
-            if (valid($mu:match(benchcontents.name, {_ingredient[1]})))
-                searchlist = setremove(searchlist, _ingredient);
-            endif
+    if ($mu:is_one_of($mutations.junkrat, player.mutations))
+        ingredient_search_list = recipe.ingredients;
+        for benchcontents in (this.contents)
+            for _ingredient in (ingredient_search_list)
+                if (valid($mu:match(benchcontents.name, {_ingredient[1]})))
+                    ingredient_search_list = setremove(ingredient_search_list, _ingredient);
+                endif
+            endfor
         endfor
-    endfor
-    player:tell(toliteral(searchlist));
-
-    return;
+        putlist = {};
+        for remaining in (ingredient_search_list)
+            howmanyneeded = remaining[2];
+            while (howmanyneeded > 0)
+                found = this:_craft_search(remaining[1]);
+                player:queue_action($actions.get, {{found[1]}, found[2]}, 1, tostr("get " found[1].name, " from ", found[2].name));
+                putlist = {@putlist, found[1]}
+                howmanyneeded = howmanyneeded -1;
+            endwhile
+        endfor
+    else
+        player:tell("According to ", recipe:dname(), ", you need ", ing:iname(), " -- and you don't have one on ", this:dname(), ".");
+        return;
+    endif
 endif
 player:queue_action($actions.craft, {recipe, player, this}, 1, "assemble");
