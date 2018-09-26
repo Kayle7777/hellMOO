@@ -3,7 +3,7 @@
 searchitem = args[1];
 sname = searchitem.name;
 "search for searchitem in all containers near player";
-"returns LIST {OBJ founditem, OBJ container}";
+"returns LIST {List {OBJ founditem}, OBJ container}";
 pfound = this:_check_contents(sname, player.contents);
 if (pfound[1])
     "If it's directly in the player inventory, no container";
@@ -33,5 +33,5 @@ else
         endfor
     endif
     "Nothing found.";
-    return {0, 0};
+    return {{0}, 0};
 endif
