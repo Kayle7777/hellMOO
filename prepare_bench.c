@@ -38,12 +38,12 @@ if (typeof(ing) == OBJ)
     if ($lu:is_one_of($mutations.junkrat, player.mutations))
         ingredient_search_list = recipe.ingredients;
         for benchcontents in (this.contents)
-            for _ingredient in (ingredient_search_list)
-                if (valid($mu:match(benchcontents.name, {_ingredient[1]})))
-                    "This is a match in the bench, for one of the ingredients. _ingredient[2] will be the quantity we need";
-                    _ingredient[2] = (_ingredient[2] - 1);
-                    if (_ingredient[2] <= 0)
-                        ingredient_search_list = setremove(ingredient_search_list, _ingredient);
+            for iter in [1..length(ingredient_search_list)]
+                if (valid($mu:match(benchcontents.name, {ingredient_search_list[iter][1]})))
+                    "This is a match in the bench, for one of the ingredients. ingredient_search_list[iter][2] will be the quantity we need";
+                    ingredient_search_list[iter][2] = (ingredient_search_list[iter][2] - 1);
+                    if (ingredient_search_list[iter][2] <= 0)
+                        ingredient_search_list = setremove(ingredient_search_list, ingredient_search_list[iter]);
                     endif
                 endif
             endfor
