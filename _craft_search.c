@@ -1,34 +1,39 @@
 
-{searchitem} = args;
+{searchitem, alreadyfound} = args;
 searchitem = args[1];
+alreadyfound = args[2];
 sname = searchitem.name;
 "search for searchitem in all containers near player";
 "returns LIST {List {OBJ founditem}, OBJ container}";
 pfound = this:_check_contents(sname, player.contents);
 if (pfound[1])
+    pcint = this:remove_if_are(player.contents, alreadyfound);
     "If it's directly in the player inventory, no container";
-    return {$mu:match_list(sname, player.contents), player};
+    return {$mu:match_list(sname, pcint), player};
 elseif (pfound[2])
     "Does player have any containers on hand, if so check them";
     for pcontainers in (pfound[2])
-        pcfound = this:_check_contents(sname, pcontainers);
+        pccontainers = this:remove_if_are(pcontainers, alreadyfound);
+        pcfound = this:_check_contents(sname, pcccontainers);
         if (pcfound[1])
-            return {$mu:match_list(sname, pcontainers.contents), pcontainers};
+            return {$mu:match_list(sname, pccontainers), pcontainers};
         endif
     endfor
 "Nothing found in player or player containers at this point";
 else
     "Now check the room";
-    rfound = this:_check_contents(sname, player.location.contents);
+    rccontaining = this:remove_if_are(player.location.contents, alreadyfound);
+    rfound = this:_check_contents(sname, rccontaining);
     if (rfound[1])
         "Found directly in the room on the floor";
-        return {$mu:match_list(sname, player.location.contents), here};
+        return {$mu:match_list(sname, rccontaining), here};
     elseif (rfound[2])
         "Any containers in room";
         for roomcontainers in (rfound[2])
-            rcfound = this:_check_contents(sname, roomcontainers.contents);
+            roomconcurrent = this:remove_if_are(roomcontainers.contents, alreadyfound);
+            rcfound = this:_check_contents(sname, roomconcurrent);
             if (rcfound[1])
-                return {$mu:match_list(sname, roomcontainers.contents), roomcontainers};
+                return {$mu:match_list(sname, roomconcurrent), roomcontainers};
             endif
         endfor
     endif

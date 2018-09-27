@@ -51,20 +51,18 @@ if (typeof(ing) == OBJ)
         "Above loop should make ingredient_search_list == the list we need to iterate through with correct required quantities";
         getlist = {};
         player:tell("current search list: ", toliteral(ingredient_search_list));
+        alreadyfound = {};
         for iter in [1..length(ingredient_search_list)]
             "Each item to search for, looks like {#obj, 2}";
             looking = this:_craft_search(ingredient_search_list[iter][1]);
             if (looking)
                 "Adds {LIST {OBJ founditem}, OBJ container} to getlist";
                 if (length(looking[1]) > ingredient_search_list[iter][2])
-                    omg = length(looking[1]);
-                    for len in [ingredient_search_list[iter][2]..omg]
-                        looking[1] = setremove(looking[1],looking[1][ingredient_search_list[iter][2]+1]);
-                    endfor
+                    while (length(looking[1]) > ingredient_search_list[iter][2])
+                        looking[1] = setremove(looking[1], looking[1][ingredient_search_list[iter][2]]);
+                    endwhile
                 endif
                 getlist = {@getlist, looking};
-                player:tell("Current looking: ", toliteral(looking));
-                player:tell("Current getlist: ", toliteral(getlist));
                 ingredient_search_list[iter][2] = ingredient_search_list[iter][2] - length(looking[1]);
             else
                 "Couldn't find anything, break out";
