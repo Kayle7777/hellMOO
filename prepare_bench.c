@@ -54,7 +54,7 @@ if (typeof(ing) == OBJ)
         alreadyfound = {};
         for iter in [1..length(ingredient_search_list)]
             "Each item to search for, looks like {#obj, 2}";
-            looking = this:_craft_search(ingredient_search_list[iter][1]);
+            looking = this:_craft_search(ingredient_search_list[iter][1], alreadyfound);
             if (looking)
                 "Adds {LIST {OBJ founditem}, OBJ container} to getlist";
                 if (length(looking[1]) > ingredient_search_list[iter][2])
@@ -63,6 +63,9 @@ if (typeof(ing) == OBJ)
                     endwhile
                 endif
                 getlist = {@getlist, looking};
+                for x in (looking[1])
+                    alreadyfound = {@alreadyfound, x};
+                endfor
                 ingredient_search_list[iter][2] = ingredient_search_list[iter][2] - length(looking[1]);
             else
                 "Couldn't find anything, break out";
