@@ -50,6 +50,21 @@ if (typeof(ing) == OBJ)
         endfor
         "Above loop should make ingredient_search_list == the list we need to iterate through with correct required quantities";
         putlist = {};
+        for i in [1..length(ingredient_search_list)]
+            while (ingredient_search_list[i][2] > 0)
+                "This comes back as a list, might be multiple finds";
+                if (valid(lookfor = this:_craft_search(ingredient_search_list[i][1])));
+                    if (lookfor[1])
+                        for x in (lookfor[1])
+                            putlist = {@putlist, x}
+                        endfor
+                        ingredient_search_list[i][2] = ingredient_search_list[i][2] - length(lookfor[1]);
+                    endif
+                else
+                    break;
+                endif
+            endwhile
+        endfor
         player:tell(toliteral(ingredient_search_list));
         player:tell("According to ", recipe:dname(), ", you need ", ing:iname(), " -- and you don't have one on ", this:dname(), ".");
     else
