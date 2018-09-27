@@ -49,24 +49,29 @@ if (typeof(ing) == OBJ)
             endfor
         endfor
         "Above loop should make ingredient_search_list == the list we need to iterate through with correct required quantities";
-        putlist = {};
-        for i in [1..length(ingredient_search_list)]
-            while (ingredient_search_list[i][2] > 0)
-                "This comes back as a list, might be multiple finds";
-                if (valid(lookfor = this:_craft_search(ingredient_search_list[i][1])));
-                    if (lookfor[1])
-                        for x in (lookfor[1])
-                            putlist = {@putlist, x}
-                        endfor
-                        ingredient_search_list[i][2] = ingredient_search_list[i][2] - length(lookfor[1]);
-                    endif
-                else
-                    break;
+        getlist = {};
+        player:tell("current search list: ", toliteral(ingredient_search_list));
+        for iter in [1..length(ingredient_search_list)]
+            "Each item to search for, looks like {#obj, 2}";
+            looking = this:_craft_search(ingredient_search_list[iter][1]);
+            if (looking)
+                "Adds {LIST {OBJ founditem}, OBJ container} to getlist";
+                if (length(looking[1]) > ingredient_search_list[iter][2])
+                    omg = length(looking[1]);
+                    for len in [ingredient_search_list[iter][2]..omg]
+                        looking[1] = setremove(looking[1],looking[1][ingredient_search_list[iter][2]+1]);
+                    endfor
                 endif
-            endwhile
+                getlist = {@getlist, looking};
+                player:tell("Current looking: ", toliteral(looking));
+                player:tell("Current getlist: ", toliteral(getlist));
+                ingredient_search_list[iter][2] = ingredient_search_list[iter][2] - length(looking[1]);
+            else
+                "Couldn't find anything, break out";
+                break;
+            endif
         endfor
-        player:tell(toliteral(ingredient_search_list));
-        player:tell("According to ", recipe:dname(), ", you need ", ing:iname(), " -- and you don't have one on ", this:dname(), ".");
+        "getlist now should equal everything that was found relevant to ingredients";
     else
         player:tell("According to ", recipe:dname(), ", you need ", ing:iname(), " -- and you don't have one on ", this:dname(), ".");
         return;

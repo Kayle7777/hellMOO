@@ -33,5 +33,5 @@ else
         endfor
     endif
     "Nothing found.";
-    return {{0}, 0};
+    return 0;
 endif
