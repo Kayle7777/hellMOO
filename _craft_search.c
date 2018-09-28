@@ -1,4 +1,3 @@
-
 {searchitem, alreadyfound} = args;
 searchitem = args[1];
 alreadyfound = args[2];
@@ -7,13 +6,13 @@ sname = searchitem.name;
 "returns LIST {List {OBJ founditem}, OBJ container}";
 pfound = this:_check_contents(sname, player.contents);
 if (pfound[1])
-    pcint = this:remove_if_are(player.contents, alreadyfound);
+    pcint = $lu:setremove_all_list(player.contents, alreadyfound);
     "If it's directly in the player inventory, no container";
     return {$mu:match_list(sname, pcint), player};
 elseif (pfound[2])
     "Does player have any containers on hand, if so check them";
     for pcontainers in (pfound[2])
-        pccontainers = this:remove_if_are(pcontainers, alreadyfound);
+        pccontainers = $lu:setremove_all_list(pcontainers, alreadyfound);
         pcfound = this:_check_contents(sname, pcccontainers);
         if (pcfound[1])
             return {$mu:match_list(sname, pccontainers), pcontainers};
@@ -22,15 +21,15 @@ elseif (pfound[2])
 "Nothing found in player or player containers at this point";
 else
     "Now check the room";
-    rccontaining = this:remove_if_are(player.location.contents, alreadyfound);
+    rccontaining = $lu:setremove_all_list(player.location.contents, alreadyfound);
     rfound = this:_check_contents(sname, rccontaining);
     if (rfound[1])
         "Found directly in the room on the floor";
-        return {$mu:match_list(sname, rccontaining), here};
+        return {$mu:match_list(sname, rccontaining), player.location};
     elseif (rfound[2])
         "Any containers in room";
         for roomcontainers in (rfound[2])
-            roomconcurrent = this:remove_if_are(roomcontainers.contents, alreadyfound);
+            roomconcurrent = $lu:setremove_all_list(roomcontainers.contents, alreadyfound);
             rcfound = this:_check_contents(sname, roomconcurrent);
             if (rcfound[1])
                 return {$mu:match_list(sname, roomconcurrent), roomcontainers};

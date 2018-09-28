@@ -55,6 +55,7 @@ if (typeof(ing) == OBJ)
         for iter in [1..length(ingredient_search_list)]
             "Each item to search for, looks like {#obj, 2}";
             looking = this:_craft_search(ingredient_search_list[iter][1], alreadyfound);
+            player:tell("Looking:    ", toliteral(looking));
             if (looking)
                 "Adds {LIST {OBJ founditem}, OBJ container} to getlist";
                 if (length(looking[1]) > ingredient_search_list[iter][2])
@@ -73,6 +74,11 @@ if (typeof(ing) == OBJ)
             endif
         endfor
         "getlist now should equal everything that was found relevant to ingredients";
+        player:tell(toliteral(getlist));
+        for get_things in (getlist)
+            "player:queue_action($actions.get, {{get_things[1]}, get_things[2]}, 1, tostr('get things from ', get_things[2].name));";
+
+        endfor
     else
         player:tell("According to ", recipe:dname(), ", you need ", ing:iname(), " -- and you don't have one on ", this:dname(), ".");
         return;
