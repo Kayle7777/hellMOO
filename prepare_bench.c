@@ -55,7 +55,9 @@ if (typeof(ing) == OBJ)
         for iter in [1..length(ingredient_search_list)]
             "Each item to search for, looks like {#obj, 2}";
             looking = this:_craft_search(ingredient_search_list[iter][1], alreadyfound);
-            player:tell("Looking:    ", toliteral(looking));
+            if (!looking || looking[2] == player)
+                looking = 0;
+            endif
             if (looking)
                 "Adds {LIST {OBJ founditem}, OBJ container} to getlist";
                 if (length(looking[1]) > ingredient_search_list[iter][2])
@@ -69,16 +71,23 @@ if (typeof(ing) == OBJ)
                 endfor
                 ingredient_search_list[iter][2] = ingredient_search_list[iter][2] - length(looking[1]);
             else
-                "Couldn't find anything, break out";
-                break;
+                "Couldn't find anything...";
             endif
         endfor
         "getlist now should equal everything that was found relevant to ingredients";
-        player:tell(toliteral(getlist));
         for get_things in (getlist)
-            "player:queue_action($actions.get, {{get_things[1]}, get_things[2]}, 1, tostr('get things from ', get_things[2].name));";
-
+            locname = 0;
+            if (get_things[2].name == player.location.name)
+                locname = "here";
+            endif
+            if (length(get_things[1]) > 1)
+                for x in (get_things[1])
+                    player:queue_action($actions.get, {{x}, get_things[2], {}}, 1, tostr("get ", x.name, " from ", locname ? locname | get_things[2].name));
+                endfor
+            endif
+            player:queue_action($actions.get, {get_things[1], get_things[2], {}}, 1, tostr("get ", get_things[1][1].name, " from ", locname ? locname | get_things[2].name));
         endfor
+        return;
     else
         player:tell("According to ", recipe:dname(), ", you need ", ing:iname(), " -- and you don't have one on ", this:dname(), ".");
         return;
