@@ -53,26 +53,29 @@ if (typeof(ing) == OBJ)
         player:tell("current search list: ", toliteral(ingredient_search_list));
         alreadyfound = {};
         for iter in [1..length(ingredient_search_list)]
-            "Each item to search for, looks like {#obj, 2}";
-            looking = this:_craft_search(ingredient_search_list[iter][1], alreadyfound);
-            if (!looking || looking[2] == player)
-                looking = 0;
-            endif
-            if (looking)
-                "Adds {LIST {OBJ founditem}, OBJ container} to getlist";
-                if (length(looking[1]) > ingredient_search_list[iter][2])
-                    while (length(looking[1]) > ingredient_search_list[iter][2])
-                        looking[1] = setremove(looking[1], looking[1][ingredient_search_list[iter][2]]);
-                    endwhile
+            for x in [1..ingredient_search_list[iter][2]]
+                "Each item to search for, looks like {#obj, 2}";
+                looking = this:_craft_search(ingredient_search_list[iter][1], alreadyfound);
+                if (!looking || looking[2] == player)
+                    looking = 0;
                 endif
-                getlist = {@getlist, looking};
-                for x in (looking[1])
-                    alreadyfound = {@alreadyfound, x};
-                endfor
-                ingredient_search_list[iter][2] = ingredient_search_list[iter][2] - length(looking[1]);
-            else
-                "Couldn't find anything...";
-            endif
+                if (looking)
+                    "Adds {LIST {OBJ founditem}, OBJ container} to getlist";
+                    if (length(looking[1]) > ingredient_search_list[iter][2])
+                        while (length(looking[1]) > ingredient_search_list[iter][2])
+                            looking[1] = setremove(looking[1], looking[1][ingredient_search_list[iter][2]]);
+                        endwhile
+                    endif
+                    getlist = {@getlist, looking};
+                    for x in (looking[1])
+                        alreadyfound = {@alreadyfound, x};
+                    endfor
+                    ingredient_search_list[iter][2] = ingredient_search_list[iter][2] - length(looking[1]);
+                else
+                    "Couldn't find anything...";
+                    break;
+                endif
+            endfor
         endfor
         "getlist now should equal everything that was found relevant to ingredients";
         for get_things in (getlist)
