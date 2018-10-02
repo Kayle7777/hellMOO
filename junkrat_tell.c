@@ -7,4 +7,7 @@ widths = {20, 40};
 header_color = {$ansi.bg_blue};
 headers = {"What", "Where"};
 
-table = $su:make_table(header_colors, headers, row_colors, rows, widths);
+puttable = $su:make_table(header_colors, headers, row_colors, putlines, widths);
+gettable = $su:make_table(header_colors, headers, row_colors, getlines, widths);
+
+return {gettable, puttable};

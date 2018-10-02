@@ -45,4 +45,8 @@ putlist = {};
 for x in (getlist)
     putlist = {@putlist, {getlist[1], player}};
 endfor
+
+telltables = this:junkrat_tell(getlist, putlist);
+
+
 return;
