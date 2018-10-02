@@ -25,14 +25,13 @@ for iter in [1..length(ingredient_search_list)]
         if (looking)
             "Adds {LIST {OBJ founditem}, OBJ container} to getlist";
             if (length(looking[1]) > ingredient_search_list[iter][2])
-                while (length(looking[1]) > ingredient_search_list[iter][2])
-                    looking[1] = setremove(looking[1], looking[1][ingredient_search_list[iter][2]]);
-                endwhile
+                "If what it found in one container exceeds the amount it needs to grab";
+                looking[1] = looking[1][1..ingredient_search_list[iter][2]];
             endif
             getlist = {@getlist, looking};
             for x in (looking[1])
                 alreadyfound = {@alreadyfound, x};
-            endfor
+            endfor6
             ingredient_search_list[iter][2] = ingredient_search_list[iter][2] - length(looking[1]);
         else
             "Couldn't find anything...";
