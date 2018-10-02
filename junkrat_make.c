@@ -14,7 +14,6 @@ for benchcontents in (this.contents)
 endfor
 "Above loop should make ingredient_search_list == the list we need to iterate through with correct required quantities";
 getlist = {};
-player:tell("current search list: ", toliteral(ingredient_search_list));
 alreadyfound = {};
 for iter in [1..length(ingredient_search_list)]
     for x in [1..ingredient_search_list[iter][2]]
@@ -41,17 +40,10 @@ for iter in [1..length(ingredient_search_list)]
         endif
     endfor
 endfor
+putlist = {};
 "getlist now should equal everything that was found relevant to ingredients";
-for get_things in (getlist)
-    locname = 0;
-    if (get_things[2].name == player.location.name)
-        locname = "here";
-    endif
-    if (length(get_things[1]) > 1)
-        for x in (get_things[1])
-            player:queue_action($actions.get, {{x}, get_things[2], {}}, 1, tostr("get ", x.name, " from ", locname ? locname | get_things[2].name));
-        endfor
-    endif
-    player:queue_action($actions.get, {get_things[1], get_things[2], {}}, 1, tostr("get ", get_things[1][1].name, " from ", locname ? locname | get_things[2].name));
+"This is where initial idea about queueing actions immediately would go.";
+for x in (getlist)
+    putlist = {@putlist, {getlist[1], player}};
 endfor
 return;
