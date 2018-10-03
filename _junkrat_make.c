@@ -31,7 +31,7 @@ for iter in [1..length(ingredient_search_list)]
             getlist = {@getlist, looking};
             for x in (looking[1])
                 alreadyfound = {@alreadyfound, x};
-            endfor6
+            endfor
             ingredient_search_list[iter][2] = ingredient_search_list[iter][2] - length(looking[1]);
         else
             "Couldn't find anything...";
@@ -47,6 +47,10 @@ for x in (getlist)
 endfor
 
 telltables = this:junkrat_tell(getlist, putlist);
+player:tell_lines(telltables[1]);
+player:tell(toliteral(getlist), toliteral(ingredient_search_list));
+conf = 0;
+
 
 
 return;
