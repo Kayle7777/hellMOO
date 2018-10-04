@@ -1,17 +1,29 @@
 {recipe} = args;
 recipe = args[1];
+inbench = {};
 ingredient_search_list = recipe.ingredients;
 for benchcontents in (this.contents)
     for iter in [1..length(ingredient_search_list)]
         if (valid($mu:match(benchcontents.name, {ingredient_search_list[iter][1]})))
             "This is a match in the bench, for one of the ingredients. ingredient_search_list[iter][2] will be the quantity we need";
             ingredient_search_list[iter][2] = (ingredient_search_list[iter][2] - 1);
+            inbench = {@inbench, ingredient_search_list[iter]};
+            for x in [1..length(inbench)]
+                for y in [1..length(inbench)]
+                    if (x[1].name == y[1].name)
+                        inbench = setremove(inbench, y)
+                    endif
+                endfor
+            endfor
             if (ingredient_search_list[iter][2] <= 0)
                 ingredient_search_list = setremove(ingredient_search_list, ingredient_search_list[iter]);
             endif
         endif
     endfor
 endfor
+player:tell(toliteral(recipe.ingredients));
+player:tell(toliteral(ingredient_search_list));
+player:tell(toliteral(inbench));
 "Above loop should make ingredient_search_list == the list we need to iterate through with correct required quantities";
 getlist = {};
 alreadyfound = {};
