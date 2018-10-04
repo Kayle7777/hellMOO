@@ -10,8 +10,8 @@ for benchcontents in (this.contents)
             inbench = {@inbench, ingredient_search_list[iter]};
             for x in [1..length(inbench)]
                 for y in [1..length(inbench)]
-                    if (x[1].name == y[1].name && x != y)
-                        inbench = setremove(inbench, x);
+                    if (inbench[x][1].name == inbench[y][1].name && x != y)
+                        inbench = setremove(inbench, inbench[x]);
                     endif
                 endfor
             endfor
