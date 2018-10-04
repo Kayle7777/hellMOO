@@ -8,13 +8,7 @@ for benchcontents in (this.contents)
             "This is a match in the bench, for one of the ingredients. ingredient_search_list[iter][2] will be the quantity we need";
             ingredient_search_list[iter][2] = (ingredient_search_list[iter][2] - 1);
             inbench = {@inbench, ingredient_search_list[iter]};
-            for x in [1..length(inbench)]
-                for y in [1..length(inbench)]
-                    if (x[1].name == y[1].name)
-                        inbench = setremove(inbench, y)
-                    endif
-                endfor
-            endfor
+            
             if (ingredient_search_list[iter][2] <= 0)
                 ingredient_search_list = setremove(ingredient_search_list, ingredient_search_list[iter]);
             endif
