@@ -29,6 +29,9 @@ else
     elseif (rfound[2])
         "Any containers in room";
         for roomcontainers in (rfound[2])
+            if (!is_a(roomcontainers, $container) || is_a(roomcontainers, $workbench))
+                continue;
+            endif
             roomconcurrent = $lu:setremove_all_list(roomcontainers.contents, alreadyfound);
             rcfound = this:_check_contents(sname, roomconcurrent);
             if (rcfound[1])
