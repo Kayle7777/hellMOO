@@ -1,14 +1,14 @@
-{?getlist = {}, ?putlist = {}} = args;
+{getlist} = args;
 
-putlines = this:_list_comp(putlist);
-getlines = this:_list_comp(getlist);
-
-widths = {20, 40};
-header_colors = {$ansi.bg_blue};
+header_colors = $ansi.bg_blue;
 headers = {"What", "Where"};
 row_colors = {$ansi.yellow, $ansi.red+$ansi.bold_on};
-
-puttable = $su:make_table(header_colors, headers, row_colors, putlines, widths);
-gettable = $su:make_table(header_colors, headers, row_colors, getlines, widths);
-
-return {gettable, puttable};
+rows = {};
+for x in (getlist)
+    for y in (x[1])
+        rows = {@rows, {y.name, x[2].name}};
+    endfor
+endfor
+widths = {20, 20};
+gettable = $su:make_table(header_colors, headers, row_colors, rows, widths);
+return gettable;
