@@ -1,4 +1,3 @@
-#498353:_check_contents   this none this
 {needle, haystack} = args;
 matches = {};
 containers = {};
