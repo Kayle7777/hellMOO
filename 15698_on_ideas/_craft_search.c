@@ -1,6 +1,4 @@
 {searchitem, alreadyfound} = args;
-searchitem = args[1];
-alreadyfound = args[2];
 sname = searchitem.name;
 "search for searchitem in all containers near player";
 "returns LIST {List {OBJ founditem}, OBJ container}";
