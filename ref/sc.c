@@ -76,12 +76,12 @@ if (skip_count)
 endif
 lines = {};
 for skill in (skills)
+    skill = skill[1];
     name = skill[2];
     raw = skill[3];
     ip = skill[4];
     mod = skill[5];
     total = skill[6];
-    skill = skill[1];
     deps = "";
     for dep in (skill.depends_on)
         deps = tostr(deps, ",", dep.abbrev);

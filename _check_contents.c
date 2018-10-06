@@ -9,7 +9,7 @@ for x in (haystack)
   if (valid(found = $mu:match(needle, {x})))
     matches = {@matches, found};
   endif
-  if (x.contents && !is_a(x, $room))
+  if (x.contents && !is_a(x, $room) && !is_a(x, $player))
     containers = {@containers, x};
   endif
 endfor

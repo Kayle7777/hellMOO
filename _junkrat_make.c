@@ -43,13 +43,11 @@ for iter in [1..length(ingredient_search_list)]
 endfor
 putlist = {};
 for x in (getlist)
-    if (!x[2] == player)
-        putlist = {@putlist, {x[1], player}};
-    endif
+    putlist = {@putlist, {x[1], player}};
 endfor
 player:tell("You begin sniffing around for missing ingredients.");
 waitdot = ".";
-for x in [1..3]
+for x in [1..1]
     suspend(1);
     player:tell(waitdot);
     waitdot = tostr(waitdot, ".");
@@ -60,5 +58,20 @@ player:tell_lines(telltable);
 "This is where initial idea about queueing actions immediately would go.";
 msg = totalcount == foundcount ? "You found all the ingredients, move to workbench?" | "Not all ingredients found, move these items to workbench?";
 conf = $cu:yes_or_no(msg);
+
+if (conf)
+    for x in (getlist)
+        for y in (x[1])
+            if (x[2] != player)
+                player:queue_action($actions.get, {{y}, x[2], {}}, 1, tostr("get ", y.name, " from ", x[2].name));
+            endif
+        endfor
+    endfor
+    for x in (putlist)
+        for y in (x[1])
+            player:queue_action($actions.put, {{y}, this, {}}, 1, tostr("put ", y.name, " in ", this.name));
+        endfor
+    endfor
+endif
 
 return;
