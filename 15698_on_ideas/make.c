@@ -1,5 +1,3 @@
-"15698 on *id";
-
 "Assemble a recipe indicated by number.";
 r = this:all_recipes();
 if (!r)
