@@ -4,9 +4,9 @@ alreadyfound = args[2];
 sname = searchitem.name;
 "search for searchitem in all containers near player";
 "returns LIST {List {OBJ founditem}, OBJ container}";
-pfound = this:_check_contents(sname, player.contents);
+playerinventory = $lu:setremove_all_list(player.contents, alreadyfound);
+pfound = this:_check_contents(sname, playerinventory);
 if (pfound[1])
-    playerinventory = $lu:setremove_all_list(player.contents, alreadyfound);
     "If it's directly in the player inventory, no container";
     return {this:_glob_check(sname, playerinventory), player};
 elseif (pfound[2])

@@ -1,5 +1,4 @@
 {recipe} = args;
-recipe = args[1];
 ingredient_search_list = recipe.ingredients;
 foundcount = 0;
 totalcount = 0;
@@ -32,7 +31,7 @@ endfor
 player:tell("You begin sniffing around for missing ingredients.");
 player.location:aab({player}, tostr(player.name, " begins sniffing around, looking for parts."));
 waitdot = ".";
-for x in [1..random(4)]
+for x in [1..random(3)]
     suspend(1);
     player:tell(waitdot);
     waitdot = tostr(waitdot, ".");
@@ -43,31 +42,32 @@ return;
 endif
 
 telltable = this:junkrat_tell(getlist);
-player:tell(foundcount);
 player:tell_lines(telltable);
 
-msg = totalcount == foundcount ? "You found all the ingredients, move to workbench?" | "Not all ingredients found, move these items to workbench?";
-conf = $cu:yes_or_no(msg);
+conf = $cu:yes_or_no(totalcount == foundcount ? "You found all the ingredients, move to workbench?" | "Not all ingredients found, move these items to workbench?");
 if (conf)
+    putlist = {};
     for x in (getlist)
         for y in (x[1])
             if (x[2] != player)
                 for qty in [1..y[2]]
                     player:queue_action($actions.get, {{y[1]}, x[2], {}}, 1, tostr("get ", y[1].name, " from ", x[2].name));
+                    suspend(2);
+                endfor
+            endif
+            if (y[2] == 1)
+                putlist = {@putlist, {y[1], player}};
+            elseif (y[2] > 1)
+                found = $mu:match_list(y[1].name, player.contents);
+                found = found[1..y[2]];
+                for x in [1..length(found)]
+                    putlist = {@putlist, {found[x], player}};
                 endfor
             endif
         endfor
     endfor
-
-putlist = {};
-
-"Due to the way globs work, there needs to be a lot of logic to make the player put the correct things in";
     for x in (putlist)
-        for y in (x[1])
-            for qty in [1..y[2]]
-                player:queue_action($actions.put, {{y[1]}, this, {}}, 1, tostr("put ", y[1].name, " in ", this.name));
-            endfor
-        endfor
+        player:queue_action($actions.put, {{x[1]}, this, {}}, 1, tostr("put ", x[1].name, " in ", this.name));
     endfor
 endif
 

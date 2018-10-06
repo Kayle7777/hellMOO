@@ -1,5 +1,4 @@
 {getlist} = args;
-
 header_colors = $ansi.bg_blue;
 headers = {"What", "Where", "Amount"};
 row_colors = {$ansi.yellow, $ansi.red+$ansi.bold_on, $ansi.red+$ansi.bold_on};
