@@ -9,12 +9,21 @@ if (benchfound[1])
 endif
 playerinventory = $lu:setremove_all_list(player.contents, alreadyfound);
 pfound = this:_check_contents(sname, playerinventory);
+rpfound = {};
+for x in (pfound[2])
+    rlcontents = $lu:setremove_all_list(x.contents, alreadyfound);
+    ll = this:_check_contents(sname, rlcontents);
+    if (!ll[1])
+        continue;
+    endif
+    rpfound = {@rpfound, x};
+endfor
 if (pfound[1])
     "If it's directly in the player inventory, no container";
     return {this:_glob_check(sname, playerinventory), player};
-elseif (pfound[2])
+elseif (rpfound)
     "Does player have any containers on hand, if so check them";
-    for playercontainers in (pfound[2])
+    for playercontainers in (rpfound)
         pccontainers = $lu:setremove_all_list(playercontainers.contents, alreadyfound);
         pcfound = this:_check_contents(sname, pccontainers);
         if (pcfound[1])
