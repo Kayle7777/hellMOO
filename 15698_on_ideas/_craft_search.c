@@ -2,6 +2,11 @@
 sname = searchitem.name;
 "search for searchitem in all containers near player";
 "returns LIST {List {OBJ founditem}, OBJ container}";
+benchcontents = $lu:setremove_all_list(this.contents, alreadyfound);
+benchfound = this:_check_contents(sname, benchcontents);
+if (benchfound[1])
+    return {this:_glob_check(sname, benchcontents), this};
+endif
 playerinventory = $lu:setremove_all_list(player.contents, alreadyfound);
 pfound = this:_check_contents(sname, playerinventory);
 if (pfound[1])
@@ -26,6 +31,7 @@ else
         return {this:_glob_check(sname, rccontaining), player.location};
     elseif (rfound[2])
         "Any containers in room";
+        rfound[2] = setremove(rfound[2], this);
         for roomcontainers in (rfound[2])
             if (!is_a(roomcontainers, $container))
                 continue;
