@@ -9,6 +9,8 @@ if (benchfound[1])
 endif
 playerinventory = $lu:setremove_all_list(player.contents, alreadyfound);
 pfound = this:_check_contents(sname, playerinventory);
+
+"This is to prevent the whole thing from breaking, if the player has a container";
 rpfound = {};
 for x in (pfound[2])
     rlcontents = $lu:setremove_all_list(x.contents, alreadyfound);
