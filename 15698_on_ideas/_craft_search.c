@@ -1,11 +1,11 @@
-{searchitem, alreadyfound} = args;
+{searchitem, alreadyfound, reqd} = args;
 sname = searchitem.name;
 "search for searchitem in all containers near player";
 "returns LIST {List {OBJ founditem}, OBJ container}";
 benchcontents = $lu:setremove_all_list(this.contents, alreadyfound);
 benchfound = this:_check_contents(sname, benchcontents);
 if (benchfound[1])
-    return {this:_glob_check(sname, benchcontents), this};
+    return {this:_glob_check(sname, benchcontents, reqd), this};
 endif
 playerinventory = $lu:setremove_all_list(player.contents, alreadyfound);
 pfound = this:_check_contents(sname, playerinventory);
@@ -22,14 +22,14 @@ for x in (pfound[2])
 endfor
 if (pfound[1])
     "If it's directly in the player inventory, no container";
-    return {this:_glob_check(sname, playerinventory), player};
+    return {this:_glob_check(sname, playerinventory, reqd), player};
 elseif (rpfound)
     "Does player have any containers on hand, if so check them";
     for playercontainers in (rpfound)
         pccontainers = $lu:setremove_all_list(playercontainers.contents, alreadyfound);
         pcfound = this:_check_contents(sname, pccontainers);
         if (pcfound[1])
-            return {this:_glob_check(sname, pccontainers), playercontainers};
+            return {this:_glob_check(sname, pccontainers, reqd), playercontainers};
         endif
     endfor
 "Nothing found in player or player containers at this point";
@@ -39,7 +39,7 @@ else
     rfound = this:_check_contents(sname, rccontaining);
     if (rfound[1])
         "Found directly in the room on the floor";
-        return {this:_glob_check(sname, rccontaining), player.location};
+        return {this:_glob_check(sname, rccontaining, reqd), player.location};
     elseif (rfound[2])
         "Any containers in room";
         rfound[2] = setremove(rfound[2], this);
@@ -50,7 +50,7 @@ else
             roomconcurrent = $lu:setremove_all_list(roomcontainers.contents, alreadyfound);
             rcfound = this:_check_contents(sname, roomconcurrent);
             if (rcfound[1])
-                return {this:_glob_check(sname, roomconcurrent), roomcontainers};
+                return {this:_glob_check(sname, roomconcurrent, reqd), roomcontainers};
             endif
         endfor
     endif

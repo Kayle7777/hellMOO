@@ -14,15 +14,10 @@ endfor
 for iter in [1..length(ingredient_search_list)]
     for qty in [1..ingredient_search_list[iter][2]]
         "Each item to search for, looks like {#obj, 2}";
-        looking = this:_craft_search(ingredient_search_list[iter][1], alreadyfound);
+        looking = this:_craft_search(ingredient_search_list[iter][1], alreadyfound, ingredient_search_list[iter][3]);
         if (!looking || length(looking[1]) == 0)
             continue;
         elseif (looking[2] == this)
-            for x in [1..length(looking[1])]
-                if (looking[1][x][2] > ingredient_search_list[iter][3])
-                    looking[1][x][2] = ingredient_search_list[iter][3];
-                endif
-            endfor
             for x in (looking[1])
                 ingredient_search_list[iter][3] = ingredient_search_list[iter][3] - x[2];
                 foundcount = foundcount + x[2];
@@ -30,11 +25,6 @@ for iter in [1..length(ingredient_search_list)]
             endfor
             continue;
         endif
-        for x in [1..length(looking[1])]
-            if (looking[1][x][2] > ingredient_search_list[iter][3])
-                looking[1][x][2] = ingredient_search_list[iter][3];
-            endif
-        endfor
         for x in (looking[1])
             ingredient_search_list[iter][3] = ingredient_search_list[iter][3] - x[2];
             foundcount = foundcount + x[2];
