@@ -67,7 +67,7 @@ if (conf)
             if (x[2] != player)
                 for qty in [1..y[2]]
                     player:queue_action($actions.get, {{y[1]}, x[2], {}}, 1, tostr("get ", y[1].name, " from ", x[2].name));
-                    suspend(1);
+                    suspend(2);
                 endfor
             endif
             if (y[2] == 1)
@@ -81,7 +81,7 @@ if (conf)
             endif
         endfor
     endfor
-    suspend(8);
+    suspend(4);
     for x in (putlist)
         player:queue_action($actions.put, {{x[1]}, this, {}}, 1, tostr("put ", x[1].name, " in ", this.name));
     endfor
