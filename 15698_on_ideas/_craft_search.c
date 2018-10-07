@@ -14,11 +14,11 @@ if (pfound[1])
     return {this:_glob_check(sname, playerinventory), player};
 elseif (pfound[2])
     "Does player have any containers on hand, if so check them";
-    for pcontainers in (pfound[2])
-        pccontainers = $lu:setremove_all_list(pcontainers, alreadyfound);
-        pcfound = this:_check_contents(sname, pcccontainers);
+    for playercontainers in (pfound[2])
+        pccontainers = $lu:setremove_all_list(playercontainers.contents, alreadyfound);
+        pcfound = this:_check_contents(sname, pccontainers);
         if (pcfound[1])
-            return {this:_glob_check(sname, pccontainers), pcontainers};
+            return {this:_glob_check(sname, pccontainers), playercontainers};
         endif
     endfor
 "Nothing found in player or player containers at this point";
