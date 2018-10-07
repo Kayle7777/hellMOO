@@ -6,13 +6,13 @@ for x in (haystack)
         suspend(0);
     endif
     found = $mu:match(needle, {x});
-    if (is_a(found, #118324))
+    if (is_a(found, #118324) || is_a(found, $dispenser))
         continue;
     endif
     if (valid(found))
         matches = {@matches, found};
     endif
-    if (x.contents && !is_a(x, $room) && !is_a(x, $player) && !is_a(x, #118324))
+    if (x.contents && !is_a(x, $room) && !is_a(x, $player) && !is_a(x, #118324) && !is_a(x, $dispenser))
         containers = {@containers, x};
     endif
 endfor
