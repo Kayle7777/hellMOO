@@ -38,7 +38,7 @@ for x in [1..random(3)]
 endfor
 if (length(getlist) == 0)
     player:tell("You didn't find anything.");
-return;
+    return;
 endif
 
 telltable = this:junkrat_tell(getlist);
