@@ -14,6 +14,9 @@ endfor
 for iter in [1..length(ingredient_search_list)]
     for qty in [1..ingredient_search_list[iter][2]]
         "Each item to search for, looks like {#obj, 2}";
+        if (ingredient_search_list[iter][3] <= 0)
+            break;
+        endif
         looking = this:_craft_search(ingredient_search_list[iter][1], alreadyfound, ingredient_search_list[iter][3]);
         if (!looking || length(looking[1]) == 0)
             continue;
