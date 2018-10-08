@@ -1,0 +1,11 @@
+Make it a separate verb ("stage");
+Can see in other player's inventories, but not get;
+Tonkatsu says, "but maybe... "Tonkatsu gets all up in your business with his whiskered face! He seems fixated on [part["
+
+
+Tell which container it was exactly
+
+
+Add a thing to check if the containers are open
+NOT searching for generics correctly [DONE]
+handle liquids
