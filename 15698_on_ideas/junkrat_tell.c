@@ -8,6 +8,6 @@ for x in (getlist)
         rows = {@rows, {y[1].name, x[2].name, tostr(y[2])}};
     endfor
 endfor
-widths = {20, 20, 6};
+widths = {20, 26, 6};
 gettable = $su:make_table(header_colors, headers, row_colors, rows, widths);
 return gettable;
