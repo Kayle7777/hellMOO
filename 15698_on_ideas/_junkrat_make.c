@@ -6,6 +6,8 @@ for x in (recipe.ingredients)
     totalcount = totalcount + x[2];
 endfor
 "Above loop should make ingredient_search_list == the list we need to iterate through with correct required quantities";
+player:tell("You begin sniffing around for missing ingredients.");
+player.location:aab({player}, tostr(player.name, " begins sniffing around, looking for parts."));
 getlist = {};
 alreadyfound = {};
 for iter in [1..length(ingredient_search_list)]
@@ -36,10 +38,8 @@ for iter in [1..length(ingredient_search_list)]
         getlist = {@getlist, looking};
     endfor
 endfor
-player:tell("You begin sniffing around for missing ingredients.");
-player.location:aab({player}, tostr(player.name, " begins sniffing around, looking for parts."));
 waitdot = ".";
-for x in [1..random(3)]
+for x in [1..3]
     suspend(1);
     player:tell(waitdot);
     waitdot = tostr(waitdot, ".");

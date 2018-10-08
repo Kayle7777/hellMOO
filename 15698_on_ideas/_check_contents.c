@@ -1,6 +1,12 @@
-{sname, what, reqd, searchitem} = args;
+{sname, what, reqd, searchitem, alreadyfound} = args;
 matches = {};
 containers = {};
+what = $lu:setremove_all_list(what, alreadyfound);
+for where in (what)
+    if (where.location == #77866)
+        "player:tell(toliteral(what))";
+    endif
+endfor
 for x in (what)
     if (ticks_left() < 1000)
         suspend(0);
@@ -12,6 +18,9 @@ for x in (what)
     "Something here to handle liquids";
     if (valid(found))
         matches = {@matches, found};
+        if (length(matches) > reqd)
+            matches = matches[1..reqd];
+        endif
     endif
     if (x.contents && !is_a(x, $room) && !is_a(x, $player) && !is_a(x, #118324) && !is_a(x, $dispenser))
         containers = {@containers, x};
@@ -23,6 +32,9 @@ if (sname[1..7] == "generic")
         found = $mu:match(y.name, what);
         if (valid(found))
             matches = {@matches, found};
+            if (length(matches) > reqd)
+                matches = matches[1..reqd];
+            endif
         endif
     endfor
 endif
