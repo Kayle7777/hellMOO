@@ -28,7 +28,7 @@ elseif (rpfound)
     for playercontainers in (rpfound)
         pccontainers = $lu:setremove_all_list(playercontainers.contents, alreadyfound);
         pcfound = this:_check_contents(sname, pccontainers, searchitem);
-        if (pcfound[1])
+        if (pcfound[1] && playerontainers.open)
             return {this:_glob_check(sname, pccontainers, reqd, searchitem), playercontainers};
         endif
     endfor
@@ -49,7 +49,7 @@ else
             endif
             roomconcurrent = $lu:setremove_all_list(roomcontainers.contents, alreadyfound);
             rcfound = this:_check_contents(sname, roomconcurrent, searchitem);
-            if (rcfound[1])
+            if (rcfound[1] && roomcontainers.open)
                 return {this:_glob_check(sname, roomconcurrent, reqd, searchitem), roomcontainers};
             endif
         endfor
