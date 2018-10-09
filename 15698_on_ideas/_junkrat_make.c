@@ -66,7 +66,12 @@ if (conf)
         endfor
     endfor
     "This seems redundant, but to handle globs rpg:spawning into players inventories, need to search through inventory after they are already got.";
-    suspend(4);
+    waitdot = ".";
+    for i in [1..5]
+        suspend(1);
+        player:tell(waitdot);
+        waitdot = tostr(waitdot, ".");
+    endfor
     for x in (getlist)
         for y in (x[1])
             if (y[2] == 1)

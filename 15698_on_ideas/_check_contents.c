@@ -18,9 +18,6 @@ for x in (what)
     "Something here to handle liquids";
     if (valid(found))
         matches = {@matches, found};
-        if (length(matches) > reqd)
-            matches = matches[1..reqd];
-        endif
     endif
     if (x.contents && !is_a(x, $room) && !is_a(x, $player) && !is_a(x, #118324) && !is_a(x, $dispenser))
         containers = {@containers, x};
@@ -32,11 +29,12 @@ if (sname[1..7] == "generic")
         found = $mu:match(y.name, what);
         if (valid(found))
             matches = {@matches, found};
-            if (length(matches) > reqd)
-                matches = matches[1..reqd];
-            endif
         endif
     endfor
+endif
+
+if (length(matches) > reqd)
+    matches = matches[1..reqd];
 endif
 
 for x in [1..length(matches)]
