@@ -2,11 +2,6 @@
 matches = {};
 containers = {};
 what = $lu:setremove_all_list(what, alreadyfound);
-for where in (what)
-    if (where.location == #77866)
-        "player:tell(toliteral(what))";
-    endif
-endfor
 for x in (what)
     if (ticks_left() < 1000)
         suspend(0);
