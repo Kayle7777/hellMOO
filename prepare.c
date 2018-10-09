@@ -1,4 +1,4 @@
-"Assemble a recipe indicated by number.";
+"Prepare a recipe indicated by number.";
 r = this:all_recipes();
 if (!r)
     player:tell("There aren't any recipes in ", this:dname(), ".  You'll have to put one in.");
@@ -33,7 +33,10 @@ else
 endif
 ing = recipe:find_ingredients(this);
 if (typeof(ing) == OBJ)
-    player:tell("According to ", recipe:dname(), ", you need ", ing:iname(), " -- and you don't have one on ", this:dname(), ".");
-    return;
+    if ($lu:is_one_of($mutations.junkrat, player.mutations))
+        return this:_junkrat_make(recipe);
+    else
+        player:tell("You realize you won't be able to sniff out any inredients with such a useless, pathetic nose.");
+        return;
+    endif
 endif
-player:queue_action($actions.craft, {recipe, player, this}, 1, "assemble");
