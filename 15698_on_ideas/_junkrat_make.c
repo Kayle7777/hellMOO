@@ -38,12 +38,6 @@ for iter in [1..length(ingredient_search_list)]
         getlist = {@getlist, looking};
     endfor
 endfor
-waitdot = ".";
-for x in [1..3]
-    suspend(1);
-    player:tell(waitdot);
-    waitdot = tostr(waitdot, ".");
-endfor
 if (length(getlist) == 0)
     player:tell("You didn't find anything.");
     return;
@@ -54,31 +48,41 @@ player:tell_lines(telltable);
 
 conf = $cu:yes_or_no(totalcount == foundcount ? "You found all the ingredients, move to workbench?" | "Not all ingredients found, move these items to workbench?");
 if (conf)
+    gotlist = {};
     putlist = {};
     for x in (getlist)
         for y in (x[1])
             if (x[2] != player)
                 for qty in [1..y[2]]
-                    player:queue_action($actions.get, {{y[1]}, x[2], {}}, 1, tostr("get ", y[1].name, " from ", x[2].name));
-                    suspend(1);
+                    player:queue_action($actions.get, {{y[1]}, x[2], {}}, 0, tostr("get ", y[1].name, " from ", x[2].name));
+                    gotlist = {@gotlist, x};
                 endfor
             endif
         endfor
     endfor
     "This seems redundant, but to handle globs rpg:spawning into players inventories, need to search through inventory after they are already got.";
-    waitdot = ".";
-    for i in [1..5]
-        suspend(1);
-        player:tell(waitdot);
-        waitdot = tostr(waitdot, ".");
-    endfor
-    for x in (getlist)
+    tr = 1;
+    while (tr)
+        ll = player.queue;
+        $cu:sin();
+        for x in (ll)
+            if (x[1] != #5838)
+                ll = setremove(ll, x);
+            endif
+        endfor
+        if (!ll)
+            tr = 0;
+        endif
+    endwhile
+    for x in (gotlist)
         for y in (x[1])
             if (y[2] == 1)
                 putlist = {@putlist, {y[1], player}};
             elseif (y[2] > 1)
                 found = $mu:match_list(y[1].name, player.contents);
-                found = found[1..y[2]];
+                if (length(found) >= y[2])
+                    found = found[1..y[2]];
+                endif
                 for x in [1..length(found)]
                     putlist = {@putlist, {found[x], player}};
                 endfor
