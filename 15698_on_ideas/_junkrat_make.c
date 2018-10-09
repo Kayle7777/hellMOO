@@ -63,8 +63,8 @@ if (conf)
     "This seems redundant, but to handle globs rpg:spawning into players inventories, need to search through inventory after they are already got.";
     tr = 1;
     while (tr)
-        ll = player.queue;
         suspend(1);
+        ll = player.queue;
         for x in [1..length(ll)]
             if (ll[x][1] != #5838)
                 ll = setremove(ll, ll[x]);
