@@ -50,7 +50,6 @@ conf = $cu:yes_or_no(totalcount == foundcount ? "You found all the ingredients, 
 if (conf)
     gotlist = {};
     putlist = {};
-    player:tell(toliteral(getlist));
     for x in (getlist)
         for y in (x[1])
             if (x[2] != player)
@@ -65,7 +64,7 @@ if (conf)
     tr = 1;
     while (tr)
         ll = player.queue;
-        $cu:sin();
+        suspend(1);
         for x in [1..length(ll)]
             if (ll[x][1] != #5838)
                 ll = setremove(ll, ll[x]);
