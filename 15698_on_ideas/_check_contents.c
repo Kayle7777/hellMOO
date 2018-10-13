@@ -19,7 +19,7 @@ for x in (what)
     endif
 endfor
 
-if (sname[1..7] == "generic")
+if (length(sname) >= 7 && sname[1..7] == "generic")
     for y in (children(searchitem))
         found = $mu:match(y.name, what);
         if (valid(found))

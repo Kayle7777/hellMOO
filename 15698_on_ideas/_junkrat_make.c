@@ -48,23 +48,30 @@ player:tell_lines(telltable);
 
 conf = $cu:yes_or_no(totalcount == foundcount ? "You found all the ingredients, move to workbench?" | "Not all ingredients found, move these items to workbench?");
 if (conf)
-    gotlist = {};
     putlist = {};
+    globlist = {};
+    gotlist = {};
     for x in (getlist)
         for y in (x[1])
-            if (x[2] != player)
-                for qty in [1..y[2]]
-                    if (length(player.queue) > 24)
-                        while (length(player.queue) > 24)
-                            suspend(2);
-                        endwhile
-                    endif
+            for qty in [1..y[2]]
+                if (length(player.queue) > 24)
+                    while (length(player.queue) > 24)
+                        suspend(2);
+                    endwhile
+                endif
+                if (x[2] != player)
                     player:queue_action($actions.get, {{y[1]}, x[2], {}}, 0, tostr("get ", y[1].name, " from ", x[2].name));
-                endfor
-                gotlist = {@gotlist, x};
-            endif
+                endif
+                if (y[2] == 1)
+                    gotlist = {@gotlist, y[1]};
+                else
+                    globlist = {@globlist, {y[1].item, y[2]}};
+                endif
+            endfor
         endfor
     endfor
+    globlist = $lu:remove_duplicates(globlist);
+    gotlist = {@gotlist, globlist};
     "This seems redundant, but to handle globs rpg:spawning into players inventories, need to search through inventory after they are already got.";
     tr = 1;
     while (tr)
@@ -80,22 +87,30 @@ if (conf)
         endif
     endwhile
     for x in (gotlist)
-        for y in (x[1])
-            if (y[2] == 1)
-                putlist = {@putlist, {y[1], player}};
-            elseif (y[2] > 1)
-                found = $mu:match_list(y[1].name, player.contents);
-                if (length(found) >= y[2])
-                    found = found[1..y[2]];
-                endif
-                for x in [1..length(found)]
-                    putlist = {@putlist, {found[x], player}};
+        if (typeof(x) == OBJ)
+            putlist = {@putlist, x};
+        else
+            "Now x is the list of globs + quant, looks like {{#obj, 4}, {#obj, 5}}";
+            for each in (x)
+                for qty in [1..each[2]]
+                    "Do this qty many times";
+                    for x in (player.contents)
+                        "x == each thing in player.contents";
+                        if (!$lu:is_one_of(x, putlist) && is_a(x, each[1]))
+                            putlist = {@putlist, x};
+                        endif
+                    endfor
                 endfor
-            endif
-        endfor
+            endfor
+        endif
     endfor
     for x in (putlist)
-        player:queue_action($actions.put, {{x[1]}, this, {}}, 1, tostr("put ", x[1].name, " in ", this.name));
+        if (length(player.queue) > 24)
+            while (length(player.queue) > 24)
+                suspend(2);
+            endwhile
+        endif
+        player:queue_action($actions.put, {{x}, this, {}}, 1, tostr("put ", x.name, " in ", this.name));
     endfor
 endif
 
