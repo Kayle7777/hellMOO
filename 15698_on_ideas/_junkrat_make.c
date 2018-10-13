@@ -54,6 +54,11 @@ if (conf)
         for y in (x[1])
             if (x[2] != player)
                 for qty in [1..y[2]]
+                    if (length(player.queue) > 24)
+                        while (length(player.queue) > 24)
+                            suspend(2);
+                        endwhile
+                    endif
                     player:queue_action($actions.get, {{y[1]}, x[2], {}}, 0, tostr("get ", y[1].name, " from ", x[2].name));
                 endfor
                 gotlist = {@gotlist, x};
@@ -63,7 +68,7 @@ if (conf)
     "This seems redundant, but to handle globs rpg:spawning into players inventories, need to search through inventory after they are already got.";
     tr = 1;
     while (tr)
-        suspend(1);
+        suspend(2);
         ll = player.queue;
         for x in [1..length(ll)]
             if (ll[x][1] != #5838)
