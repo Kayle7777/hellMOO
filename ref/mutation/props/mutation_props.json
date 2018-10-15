@@ -1,0 +1,19 @@
+{
+    "look_self_msg": "",
+    "skill_mods": [],
+    "incompatible_with": [],
+    "mutate_msg": "%DN's body twists and shudders, and something writhes under %p skin, crawling through the tissues and subtly altering them.",
+    "notice_difficulty": [1, 5],
+    "notice_bodypart": "#16379",
+    "requires": [],
+    "class": "$nothing",
+    "class_max": 0,
+    "mutants": [],
+    "dodge_mod": -8,
+    "ij_category": "general",
+    "mservo_msg": "I dunno how you'd get that mutation.  You're on your own.",
+    "mservo_recommend_msg": [],
+    "semenarium_penalty": 0.9,
+    "rep_msg": "",
+    "health_bonus": 0
+}

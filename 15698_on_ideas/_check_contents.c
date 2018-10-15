@@ -6,7 +6,8 @@ for x in (what)
     if (ticks_left() < 1000)
         suspend(0);
     endif
-    found = $mu:match(sname, {x});
+    isfound = $ou:isa(x,searchitem) == valid(x) && (searchitem==x || searchitem in $ou:ancestors(x));
+    found = isfound ? x | $nothing;
     if (is_a(found, #118324) || is_a(found, $dispenser) || is_a(found, $liquid))
         continue;
     endif
